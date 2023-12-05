@@ -1,0 +1,33 @@
+.Panel {
+  background-color: rgb(181, 181, 181);
+  width: calc(100svw - 60px);
+  padding: 2em 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+
+  >.Panel-title {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+
+  >.Panel-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+
+    >table {
+      >div {
+        >label {
+          font-weight: bold;
+        }
+
+        >input {}
+      }
+    }
+  }
+
+}

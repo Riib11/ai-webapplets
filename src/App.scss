@@ -1,0 +1,89 @@
+// @use "constants.scss";
+
+// colors
+$App-background-color: white;
+$App-secondary-color: rgb(73, 73, 73);
+$App-primary-color: orange;
+$App-terciary-color: rgb(50, 132, 255);
+
+$App-font-size: 14pt;
+
+.App {
+  height: 100svh;
+  width: 100svw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background-color: $App-background-color;
+  font-size: $App-font-size;
+}
+
+.App-header {
+  width: 100svw;
+  padding: 1em 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  // background-color: lightgray;
+
+  gap: 1em;
+}
+
+.App-title {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.App-menu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2em;
+
+  >div {
+    padding: 0.5em 1em;
+    cursor: pointer;
+
+    background-color: $App-secondary-color;
+    color: $App-primary-color;
+
+    font-weight: bold;
+  }
+
+  >div:hover {
+    outline: $App-primary-color solid 0.2em;
+  }
+
+  >div.active {
+    outline: $App-terciary-color solid 0.2em;
+  }
+}
+
+
+
+
+.App-footer {
+  width: 100svw;
+  padding: 1em 0;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2em;
+
+  // background-color: lightgray;
+
+  >div {
+    padding: 0.5em 1em;
+    cursor: pointer;
+
+    background-color: $App-secondary-color;
+    color: $App-primary-color;
+
+    font-weight: bold;
+  }
+}

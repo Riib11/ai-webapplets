@@ -1,0 +1,146 @@
+$it: 30px;
+
+$mtg-red: rgb(241, 80, 80);
+$mtg-blue: rgb(138, 138, 253);
+$mtg-green: rgb(96, 182, 96);
+$mtg-white: rgb(241, 241, 201);
+$mtg-black: rgb(170, 170, 170);
+$mtg-gold: rgb(177, 159, 42);
+
+
+
+.MtgCard {
+  background-color: black;
+  border-radius: 10px;
+
+  font-size: 12pt;
+
+  // BEGIN colors
+  >.MtgCard_inner.MtgColor_red { background: $mtg-red; }
+  >.MtgCard_inner.MtgColor_green { background: $mtg-green; }
+  >.MtgCard_inner.MtgColor_blue { background: $mtg-blue; }
+  >.MtgCard_inner.MtgColor_white { background: $mtg-white; }
+  >.MtgCard_inner.MtgColor_black { background: $mtg-black; }
+  >.MtgCard_inner.MtgColor_gold { background: $mtg-gold; }
+  >.MtgCard_inner.MtgColor_hybrid_red_green { background: linear-gradient(90deg, $mtg-red 0%, $mtg-green 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_red_blue { background: linear-gradient(90deg, $mtg-red 0%, $mtg-blue 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_red_white { background: linear-gradient(90deg, $mtg-red 0%, $mtg-white 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_red_black { background: linear-gradient(90deg, $mtg-red 0%, $mtg-black 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_green_red { background: linear-gradient(90deg, $mtg-green 0%, $mtg-red 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_green_blue { background: linear-gradient(90deg, $mtg-green 0%, $mtg-blue 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_green_white { background: linear-gradient(90deg, $mtg-green 0%, $mtg-white 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_green_black { background: linear-gradient(90deg, $mtg-green 0%, $mtg-black 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_blue_red { background: linear-gradient(90deg, $mtg-blue 0%, $mtg-red 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_blue_green { background: linear-gradient(90deg, $mtg-blue 0%, $mtg-green 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_blue_white { background: linear-gradient(90deg, $mtg-blue 0%, $mtg-white 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_blue_black { background: linear-gradient(90deg, $mtg-blue 0%, $mtg-black 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_white_red { background: linear-gradient(90deg, $mtg-white 0%, $mtg-red 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_white_green { background: linear-gradient(90deg, $mtg-white 0%, $mtg-green 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_white_blue { background: linear-gradient(90deg, $mtg-white 0%, $mtg-blue 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_white_black { background: linear-gradient(90deg, $mtg-white 0%, $mtg-black 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_black_red { background: linear-gradient(90deg, $mtg-black 0%, $mtg-red 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_black_green { background: linear-gradient(90deg, $mtg-black 0%, $mtg-green 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_black_blue { background: linear-gradient(90deg, $mtg-black 0%, $mtg-blue 100%); }
+  >.MtgCard_inner.MtgColor_hybrid_black_white { background: linear-gradient(90deg, $mtg-black 0%, $mtg-white 100%); }
+  // END colors
+
+  >.MtgCard_inner {
+    margin: 16px;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: white;
+
+    >.MtgCard_header {
+      padding: 8px;
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      border-bottom: 2px solid black;
+    }
+
+    >.MtgCard_upper {
+      >.MtgCard_image {
+        margin: 0;
+        padding: 0;
+        width: 300px;
+        aspect-ratio: 1;
+      }
+    }
+
+    >.MtgCard_middle {
+      padding: 8px;
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      // border-top: 2px solid black;
+      border-bottom: 2px solid black;
+
+      >div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+      }
+
+      >div>.MtgCard_card_type {}
+
+      >div>.MtgCard_card_subtype {}
+
+
+    }
+
+    >.MtgCard_lower {
+      height: 100%;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 16px;
+
+      >.MtgCard_oracle_text {
+        width: 300px - 2*16px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+
+      >.MtgCard_lower_divider {
+        width: 100%;
+        color: gray;
+      }
+
+      >.MtgCard_flavor_text {
+        font-style: italic;
+        width: 300px - 2*16px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+
+      >.MtgCard_status {
+        display: flex;
+        flex-direction: row;
+        align-items: end;
+
+
+        // Creature
+        .MtgCard_status_power {}
+
+        .MtgCard_status_power_toughness_divider {}
+
+        .MtgCard_status_toughness {}
+
+        // Planeswalker
+        .MtgCard_status_loyalty {}
+      }
+    }
+  }
+}
