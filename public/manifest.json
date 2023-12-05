@@ -1,6 +1,6 @@
 {
   "short_name": "AI Webapplets",
-  "name": "AI Webapplets Icon",
+  "name": "AI Webapplets",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,6 +18,9 @@
       "sizes": "512x512"
     }
   ],
+  "permissions": {
+    "clipboardRead": true
+  },
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",

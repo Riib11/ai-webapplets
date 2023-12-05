@@ -1,5 +1,5 @@
-import '../Panel.scss'
-import './MtgCardPanel.scss'
+import '../Applet.scss'
+import './MtgCardApplet.scss'
 import { ChangeEventHandler, FormEventHandler, useMemo, useReducer, useState } from 'react'
 import { MtgCard, MtgCardView } from './MtgCard';
 import OpenAI from "openai";
@@ -79,11 +79,11 @@ function downloadMtgCard(card: MtgCard) {
 }
 
 
-export type MtgCardPanelProps = {
+export type MtgCardAppletProps = {
   OPENAI_API_KEY: string
 }
 
-export default function MtgCardPanel(props: MtgCardPanelProps): JSX.Element {
+export default function MtgCardApplet(props: MtgCardAppletProps): JSX.Element {
   const openai = useMemo(() => new OpenAI({
     apiKey: props.OPENAI_API_KEY,
     dangerouslyAllowBrowser: true
@@ -225,12 +225,20 @@ export default function MtgCardPanel(props: MtgCardPanelProps): JSX.Element {
     };
   }
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const { name, value, type, checked } = event.target;
-    setPrompt(prompt => ({
-      ...prompt,
-      [name]: type === 'checkbox' ? checked : value
-    }))
+  const handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
+    if (event.target instanceof HTMLTextAreaElement) {
+      const { name, value, type } = event.target;
+      setPrompt(prompt => ({
+        ...prompt,
+        [name]: value
+      }))
+    } else {
+      const { name, value, type, checked } = event.target;
+      setPrompt(prompt => ({
+        ...prompt,
+        [name]: type === 'checkbox' ? checked : value
+      }))
+    }
   }
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
@@ -260,17 +268,17 @@ export default function MtgCardPanel(props: MtgCardPanelProps): JSX.Element {
   }
 
   return (
-    <div className="Panel MtgCardPanel">
-      <div className='Panel-title'>
+    <div className="Applet MtgCardApplet">
+      <div className='Applet-title'>
         MTG Card
       </div>
 
-      <form className='Panel-form' onSubmit={handleSubmit}>
+      <form className='Applet-form' onSubmit={handleSubmit}>
         <table>
           <tbody>
             <tr>
               <td><label>theme:</label></td>
-              <td><input type="text" name="theme" value={prompt.theme} onChange={handleChange} /></td>
+              <td><textarea name="theme" value={prompt.theme} onChange={handleChange} /></td>
             </tr>
             <tr>
               <td><label>do image:</label></td>
@@ -281,15 +289,15 @@ export default function MtgCardPanel(props: MtgCardPanelProps): JSX.Element {
         <button type="submit">Submit</button>
       </form>
 
-      <div className='Panel-result'>
+      <div className='Applet-result'>
         {resultsCurrent.map(result => {
           switch (result.case) {
             case 'awaiting': return (
               <DescriptionLoading key={result.card_id} description={result.prompt.theme} />
             );
             case 'done': return (
-              <div style={({ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' })}>
-                <MtgCardView key={result.card.name} card={result.card} />
+              <div key={result.card.name} style={({ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' })}>
+                <MtgCardView card={result.card} />
                 <button onClick={(event) => downloadMtgCard(result.card)}>download</button>
               </div>
             );

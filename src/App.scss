@@ -1,89 +1,121 @@
-// @use "constants.scss";
+$app-font-size: 14pt;
+$app-font-family: monospace;
 
-// colors
-$App-background-color: white;
-$App-secondary-color: rgb(73, 73, 73);
-$App-primary-color: orange;
-$App-terciary-color: rgb(50, 132, 255);
+$sidebar-color: white;
+$sidebar-background: black;
+$hover-background: lightcoral;
+$content-background: gray;
+$active-background: $content-background;
 
-$App-font-size: 14pt;
+html,
+body {
+  background: $sidebar-background;
+}
 
 .App {
   height: 100svh;
   width: 100svw;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  background-color: $App-background-color;
-  font-size: $App-font-size;
-}
-
-.App-header {
-  width: 100svw;
-  padding: 1em 0;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  // background-color: lightgray;
-
-  gap: 1em;
-}
-
-.App-title {
-  font-size: 2em;
-  font-weight: bold;
-}
-
-.App-menu {
-  display: flex;
   flex-direction: row;
-  align-items: center;
-  gap: 2em;
+  align-items: start;
 
-  >div {
-    padding: 0.5em 1em;
-    cursor: pointer;
+  background: $sidebar-background;
+  font-size: $app-font-size;
+  font-family: $app-font-family;
 
-    background-color: $App-secondary-color;
-    color: $App-primary-color;
+  >.sidebar {
+    width: 300px;
+    height: calc(100svh - 2em);
 
-    font-weight: bold;
+    padding: 1em 0;
+
+    background: $sidebar-background;
+    color: $sidebar-color;
+
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+
+    >.header {
+      padding: 0 0.5em;
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      gap: 0.5em;
+
+      >.title {
+        font-weight: bold;
+      }
+
+      >.api-key {
+        display: block;
+      }
+    }
+
+
+    .menu {
+      width: 100%;
+      margin: 1em 0;
+
+      display: flex;
+      flex-direction: column;
+
+      overflow-y: scroll;
+
+      .item {
+        padding: 0.5em;
+        cursor: pointer;
+      }
+
+      .item:hover {
+        background: $hover-background;
+      }
+
+      .item.active {
+        background: $active-background;
+      }
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .menu::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .menu {
+      -ms-overflow-style: none;
+      /* IE and Edge */
+      scrollbar-width: none;
+      /* Firefox */
+    }
+
+    >.footer {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex-wrap: nowrap;
+      font-size: 0.5em;
+
+      >div {
+        text-align: center;
+        flex-grow: 1;
+      }
+
+      >div:hover {
+        background: $active-background;
+        cursor: pointer;
+      }
+    }
   }
 
-  >div:hover {
-    outline: $App-primary-color solid 0.2em;
-  }
+  >.content {
+    flex-grow: 1;
+    width: 100%;
+    height: calc(100svh - 2em);
 
-  >div.active {
-    outline: $App-terciary-color solid 0.2em;
-  }
-}
+    padding: 1em;
 
-
-
-
-.App-footer {
-  width: 100svw;
-  padding: 1em 0;
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 2em;
-
-  // background-color: lightgray;
-
-  >div {
-    padding: 0.5em 1em;
-    cursor: pointer;
-
-    background-color: $App-secondary-color;
-    color: $App-primary-color;
-
-    font-weight: bold;
+    background: $content-background;
   }
 }
