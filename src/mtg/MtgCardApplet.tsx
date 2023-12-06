@@ -7,6 +7,7 @@ import * as ai from '../ai';
 import OpenAI from 'openai';
 import { Result, ok } from '../result';
 import Button from '../widget/Button';
+import LevelLoader from '../widget/LevelLoader';
 
 type Inputs = {
   system: { case: 'string', value: string },
@@ -15,13 +16,14 @@ type Inputs = {
 }
 
 type GenerationState = {
+  level: number,
 }
 
 type Generation = { card: MtgCard.MtgCard }
 
 export default function MtgCardApplet(
   props: {}
-): JSX.Element {
+): React.ReactNode {
   const openai = ai.useOpenAI();
 
   const defaultInputs: Inputs = {
@@ -31,10 +33,20 @@ export default function MtgCardApplet(
   };
 
   function initializeGenerationState(inputs: Inputs): GenerationState {
-    return ({})
+    return ({
+      level: 0,
+    })
   };
 
   async function generate(inputs: Inputs, state: GenerationState, setState: React.Dispatch<React.SetStateAction<GenerationState>>): Promise<Result<Generation>> {
+    function incrementLevel() {
+      state = { ...state, level: state.level + 1 }
+      console.log("incremement level", state)
+      setState(state)
+    }
+
+    incrementLevel()
+
     // text data
     const text_data = await ai.openai_chat_completions_create_function_call(openai,
       {
@@ -85,8 +97,10 @@ export default function MtgCardApplet(
         { role: "user", content: `Design a interesting and powerful yet balanced creature card with the following theme: ${inputs.theme.value}.` }
       ]
     ).then(result => result.expect());
+    incrementLevel()
 
-    async function generate_image_src() {
+    // image data
+    const image_src = await (async () => {
       if (!inputs["image?"].value) { return undefined }
 
       return await ai.openai_images_generate_b64_json(
@@ -96,10 +110,8 @@ export default function MtgCardApplet(
           `Create a thematic artwork for ${text_data.name}. The artwork MUST be focussed on ${text_data.name} and capture the creature's essence and be fantasy styled, finely detailed, and high contrast.`,
         ].join("\n")
       ).then(result => result.expect())
-    }
-
-    // image data
-    const image_src = await generate_image_src();
+    })()
+    incrementLevel()
 
     return ok<Generation>({
       card: {
@@ -124,6 +136,7 @@ export default function MtgCardApplet(
       return (
         <div>
           Theme: {inputs.theme.value}
+          <LevelLoader maxLevel={inputs['image?'].value ? 3 : 2} level={state.level} width="10em" />
         </div>
       )
     } else {
@@ -145,19 +158,7 @@ export default function MtgCardApplet(
               }}
             >
               <MtgCard.MtgCardView card={card} />
-              <Button onClick={async (event) => {
-                var jsonString = JSON.stringify(card);
-                var blob = new Blob([jsonString], { type: "application/json" });
-                var url = URL.createObjectURL(blob);
-
-                var a = document.createElement('a');
-                a.href = url;
-                a.download = `${card.name}.mtg-card.json`;
-                a.click();
-                document.removeChild(a);
-
-                window.URL.revokeObjectURL(url);
-              }}
+              <Button onClick={async (event) => downloadMtgCard(card)}
               >download</Button>
             </div>
           )
@@ -173,6 +174,22 @@ export default function MtgCardApplet(
       initializeGenerationState={initializeGenerationState}
       generate={generate}
       renderGeneration={renderGeneration}
+      generationsStyle={{
+        flexDirection: "row-reverse",
+      }}
     />
   )
+}
+
+function downloadMtgCard(card: MtgCard.MtgCard): void {
+  var jsonString = JSON.stringify(card);
+  var blob = new Blob([jsonString], { type: "application/json" });
+  var url = URL.createObjectURL(blob);
+
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = `${card.name}.mtg-card.json`;
+  a.click();
+
+  window.URL.revokeObjectURL(url);
 }

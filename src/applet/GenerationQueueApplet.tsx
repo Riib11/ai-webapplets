@@ -97,6 +97,7 @@ export default function GenerationQueueApplet<Inputs extends GenericInputs, Gene
           flexDirection: "column-reverse",
           alignItems: "flex-start",
           gap: "1em",
+          overflow: "scroll",
           ...props.generationsStyle
         }}>
         {generationProps.map((props, i) => (

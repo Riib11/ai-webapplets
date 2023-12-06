@@ -18,6 +18,9 @@ export const button_disabled_background = "gray";
 export const button_color = "white";
 export const button_hover_background = "purple";
 
+// loader
+export const loader_background = "purple"
+
 // miscellaneous
 export const hover_background = "rgb(72, 72, 72)";
 export const active_background = content_background;
