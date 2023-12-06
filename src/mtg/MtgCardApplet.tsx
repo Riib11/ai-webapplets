@@ -4,6 +4,7 @@ import { ChangeEventHandler, FormEventHandler, useMemo, useReducer, useState } f
 import { MtgCard, MtgCardView } from './MtgCard';
 import OpenAI from "openai";
 import DescriptionLoading from '../widget/DescriptionLoading';
+import * as Applet from '../Applet';
 
 type Prompt = {
   system: string,
@@ -269,10 +270,6 @@ export default function MtgCardApplet(props: MtgCardAppletProps): JSX.Element {
 
   return (
     <div className="Applet MtgCardApplet">
-      <div className='Applet-title'>
-        MTG Card
-      </div>
-
       <form className='Applet-form' onSubmit={handleSubmit}>
         <table>
           <tbody>
