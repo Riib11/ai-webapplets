@@ -41,7 +41,6 @@ export default function MtgCardApplet(
   async function generate(inputs: Inputs, state: GenerationState, setState: React.Dispatch<React.SetStateAction<GenerationState>>): Promise<Result<Generation>> {
     function incrementLevel() {
       state = { ...state, level: state.level + 1 }
-      console.log("incremement level", state)
       setState(state)
     }
 

@@ -8,7 +8,6 @@ export default function LevelLoader(
     width: React.CSSProperties['width']
   }
 ): React.ReactNode {
-  console.log(props.level / props.maxLevel);
   return (
     <div
       style={{

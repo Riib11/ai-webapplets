@@ -4,16 +4,16 @@ import ExampleResultQueueApplet from './applet/ExampleResultQueueApplet';
 import Applet from './Applet';
 import * as constants from './constants';
 import * as ai from './ai';
+import KnowledgeTreeApplet from './applet/KnowledgeTreeApplet';
 
 const appModes = (() => {
   let appModes = [
     'mtg card',
+    'knowledge Tree',
     'short story',
-    'example result queue',
-    'knowledge graph'
   ];
 
-  for (let i = 1; i <= 40; i++) appModes.push(`example #${i}`);
+  // for (let i = 1; i <= 40; i++) appModes.push(`example #${i}`);
 
   return appModes
 })()
@@ -47,13 +47,20 @@ export default function App() {
         {(() => {
           if (OPENAI_API_KEY === "") {
             return (
-              <div style={{ fontStyle: 'italic', backgroundColor: 'lightsalmon', padding: "1em" }}>
+              <div
+                style={{
+                  fontStyle: 'italic',
+                  width: "fit-content",
+                  backgroundColor: 'lightsalmon',
+                  padding: "1em"
+                }}>
                 You need to provide your OpenAI API key in order to use this webapp.
               </div>
             )
           }
           switch (mode) {
             case 'mtg card': return (<MtgCardApplet />)
+            case 'knowledge Tree': return (<KnowledgeTreeApplet />)
             case 'example result queue': return (<ExampleResultQueueApplet />)
             default: return (<Applet title={mode}>TODO</Applet>)
           }
@@ -110,13 +117,15 @@ export default function App() {
             style={{
               display: "block",
               width: "100%",
+              background: constants.sidebar_background,
+              color: constants.sidebar_color,
             }}
           />
         </div>
         <div
           style={{
+            flexGrow: 1,
             width: "100%",
-            // margin: "1em 0",
             display: "flex",
             flexDirection: "column",
             overflowY: "scroll",
@@ -133,8 +142,9 @@ export default function App() {
           // footer
           style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center", flexWrap: "nowrap", fontSize: "0.5em" }}
         >
-          <FooterItem label="𝕏" />
-          <FooterItem label="gh" />
+          <FooterItem label="yb" href="https://rybl.net" />
+          <FooterItem label="𝕏" href="https://x.com/rybl4" />
+          <FooterItem label="gh" href="https://github.com/riib11" />
         </div>
       </div>
       <div
@@ -183,20 +193,29 @@ function MenuItem(props: { mode: AppMode, activate: () => void, active: boolean 
   )
 }
 
-function FooterItem(props: { label: string }): JSX.Element {
+function FooterItem(
+  props: {
+    label: string,
+    href: string,
+  }
+): JSX.Element {
   const [hover, setHover] = React.useState(false);
 
   return (
-    <div
+    <a
       style={{
+        display: "block",
         textAlign: "center",
         flexGrow: 1,
         padding: "0.5em 0",
         cursor: "pointer",
+        color: constants.sidebar_color,
+        textDecoration: "none",
         background: hover ? constants.hover_background : constants.sidebar_background,
       }}
+      href={props.href}
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
-    >{props.label}</div>
+    >{props.label}</a>
   )
 }

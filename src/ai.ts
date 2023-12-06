@@ -31,6 +31,7 @@ export type ChatCompletionToolFunctionParameters
   = { type: "object", properties: { [name: string]: ChatCompletionToolFunctionParameters } }
   | { type: "string", description: string }
   | { type: "number", description: string }
+  | {}
 
 export type FunctionCallParameters<T> =
   T extends { type: "function", function: { parameters: infer P } } ? FunctionCallParameters<P> :
@@ -67,7 +68,6 @@ export async function openai_images_generate_b64_json(
   openai: OpenAI,
   prompt: string,
 ): Promise<Result<string>> {
-  console.log("[openai_images_generate_b64_json]")
   const image_completion = await openai.images.generate({
     model: 'dall-e-3',
     n: 1,
