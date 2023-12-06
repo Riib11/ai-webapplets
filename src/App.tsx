@@ -31,8 +31,8 @@ export default function App() {
   const [OPENAI_API_KEY, _set_OPENAI_API_KEY] = useState<string>("");
 
   function set_OPENAI_API_KEY(new_OPENAI_API_KEY: string): void {
-    _set_OPENAI_API_KEY(new_OPENAI_API_KEY);
     ai.keys.OPENAI_API_KEY = new_OPENAI_API_KEY;
+    _set_OPENAI_API_KEY(new_OPENAI_API_KEY);
   }
 
   function renderAppModeContent(mode: AppMode): JSX.Element {
@@ -53,7 +53,7 @@ export default function App() {
             )
           }
           switch (mode) {
-            case 'mtg card': return (<MtgCardApplet OPENAI_API_KEY={OPENAI_API_KEY} />)
+            case 'mtg card': return (<MtgCardApplet />)
             case 'example result queue': return (<ExampleResultQueueApplet />)
             default: return (<Applet title={mode}>TODO</Applet>)
           }
@@ -106,7 +106,7 @@ export default function App() {
             type='password'
             id="OPENAI_API_KEY"
             placeholder='OpenAI API key'
-            onChange={(event) => _set_OPENAI_API_KEY(event.target.value)}
+            onChange={(event) => set_OPENAI_API_KEY(event.target.value)}
             style={{
               display: "block",
               width: "100%",

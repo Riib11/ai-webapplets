@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Applet from '../Applet';
-import * as ResultQueueApplet from './ResultQueueApplet';
+import ResultQueueApplet from './GenerationQueueApplet';
 import { sleep } from 'openai/core';
 
 type Inputs = {
@@ -24,13 +24,13 @@ export default function ExampleResultQueueApplet(props: {}): JSX.Element {
     "this is a number, and you should enter it properly!! but if you don't its not a huge deal but actually it is": { case: 'number', value: 0 },
   }
 
-  function initialGenerationState(inputs: Inputs): GenerationState {
+  function initializeGenerationState(inputs: Inputs): GenerationState {
     return ({
       i: 0
     })
   }
 
-  async function generateResult(inputs: Inputs, state: GenerationState, setState: React.Dispatch<React.SetStateAction<GenerationState>>): Promise<Result> {
+  async function generate(inputs: Inputs, state: GenerationState, setState: React.Dispatch<React.SetStateAction<GenerationState>>): Promise<Result> {
     for (let i = 0; i < 10; i++) {
       setState({ ...state, i });
       await sleep(100);
@@ -40,7 +40,7 @@ export default function ExampleResultQueueApplet(props: {}): JSX.Element {
     }
   }
 
-  function renderResult(inputs: Inputs, state: GenerationState, result?: Result): JSX.Element {
+  function renderGeneration(inputs: Inputs, state: GenerationState, result?: Result): JSX.Element {
     const style: React.CSSProperties =
     {
       transition: "border-color 1s linear",
@@ -77,12 +77,12 @@ export default function ExampleResultQueueApplet(props: {}): JSX.Element {
   }
 
   return (
-    <ResultQueueApplet.ResultQueueApplet<Inputs, GenerationState, Result>
+    <ResultQueueApplet<Inputs, GenerationState, Result>
       title="Example Result Queue"
       defaultInputs={defaultInputs}
-      initialGenerationState={initialGenerationState}
-      generateResult={generateResult}
-      renderResult={renderResult}
+      initializeGenerationState={initializeGenerationState}
+      generate={generate}
+      renderGeneration={renderGeneration}
     />
   )
 }

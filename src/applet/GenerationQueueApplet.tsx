@@ -9,34 +9,29 @@ export type GenericInputValue
 
 export type GenericInputs = { [key: string]: GenericInputValue }
 
-
-
-export function ResultQueueApplet<Inputs extends GenericInputs, GenerationState, Result>(
+export default function GenerationQueueApplet<Inputs extends GenericInputs, GenerationState, Generation>(
   props:
     {
       title: string,
       defaultInputs: Inputs,
-      initialGenerationState: (inputs: Inputs) => GenerationState,
-      generateResult: (inputs: Inputs, state: GenerationState, setState: React.Dispatch<React.SetStateAction<GenerationState>>) => Promise<Result>,
-      renderResult: (inputs: Inputs, state: GenerationState, result?: Result) => JSX.Element,
-      resultsStyle?: React.CSSProperties
+      initializeGenerationState: (inputs: Inputs) => GenerationState,
+      generate: (inputs: Inputs, state: GenerationState, setState: React.Dispatch<React.SetStateAction<GenerationState>>) => Promise<Generation>,
+      renderGeneration: (inputs: Inputs, state: GenerationState, generation?: Generation) => JSX.Element,
+      generationsStyle?: React.CSSProperties
     }
 ): JSX.Element {
-  const [resultElements, setResultElements] = React.useState<JSX.Element[]>([]);
+  // const [generationElements, setGenerationElements] = React.useState<JSX.Element[]>([]);
+  const [generationProps, setGenerationProps] = React.useState<GenerationProps<Inputs, GenerationState, Generation>[]>([]);
   const [inputs, setInputs] = React.useState<Inputs>(props.defaultInputs);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setResultElements([
-      ...resultElements,
-      (<Result
-        key={resultElements.length}
-        inputs={structuredClone(inputs)}
-        initialGenerationState={props.initialGenerationState}
-        generateResult={props.generateResult}
-        renderResult={props.renderResult}
-      />)
-    ])
+    setGenerationProps([...generationProps, {
+      inputs: structuredClone(inputs),
+      initializeGenerationState: props.initializeGenerationState,
+      generate: props.generate,
+      renderGeneration: props.renderGeneration,
+    }])
   }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -96,15 +91,23 @@ export function ResultQueueApplet<Inputs extends GenericInputs, GenerationState,
         </table>
         <SubmitButton />
       </form>
-      <div /** results */
+      <div /** generations */
         style={{
           display: "flex",
           flexDirection: "column-reverse",
           alignItems: "flex-start",
           gap: "1em",
-          ...props.resultsStyle
+          ...props.generationsStyle
         }}>
-        {resultElements}
+        {generationProps.map((props, i) => (
+          <Generation
+            key={i}
+            inputs={props.inputs}
+            initializeGenerationState={props.initializeGenerationState as any}
+            generate={props.generate as any}
+            renderGeneration={props.renderGeneration as any}
+          />
+        ))}
       </div>
     </Applet >
   )
@@ -132,20 +135,20 @@ function SubmitButton(props: {}) {
   )
 }
 
-function Result<Inputs extends GenericInputs, GenerationState, Result>(
-  props: {
-    inputs: Inputs,
-    initialGenerationState: (inputs: Inputs) => GenerationState,
-    generateResult: (inputs: Inputs, state: GenerationState, setState: React.Dispatch<React.SetStateAction<GenerationState>>) => Promise<Result>,
-    renderResult: (inputs: Inputs, state: GenerationState, result?: Result) => JSX.Element,
-  }
-): JSX.Element {
-  const [state, setState] = React.useState(props.initialGenerationState(props.inputs));
-  const [result, setResult] = React.useState<Result | undefined>(undefined);
+type GenerationProps<Inputs extends GenericInputs, GenerationState, Generation> = {
+  inputs: Inputs,
+  initializeGenerationState: (inputs: Inputs) => GenerationState,
+  generate: (inputs: Inputs, state: GenerationState, setState: React.Dispatch<React.SetStateAction<GenerationState>>) => Promise<Generation>,
+  renderGeneration: (inputs: Inputs, state: GenerationState, generation?: Generation) => JSX.Element,
+}
+
+function Generation<Inputs extends GenericInputs, GenerationState, Generation>(props: GenerationProps<Inputs, GenerationState, Generation>): JSX.Element {
+  const [state, setState] = React.useState(props.initializeGenerationState(props.inputs));
+  const [generation, setGeneration] = React.useState<Generation | undefined>(undefined);
 
   React.useEffect(() => {
-    props.generateResult(props.inputs, state, setState).then(setResult);
+    props.generate(props.inputs, state, setState).then(setGeneration);
   }, []);
 
-  return props.renderResult(props.inputs, state, result);
+  return props.renderGeneration(props.inputs, state, generation);
 }
