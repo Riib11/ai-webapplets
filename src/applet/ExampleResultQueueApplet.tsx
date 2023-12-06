@@ -44,14 +44,14 @@ export default function ExampleResultQueueApplet(props: {}): JSX.Element {
     const style: React.CSSProperties =
     {
       transition: "border-color 1s linear",
-      padding: "1em",
+      padding: "0.5em",
       borderStyle: "solid",
-      borderWidth: "1em",
+      borderWidth: "0.5em",
       ...
       (result === undefined ?
         {
-          backgroundColor: "lightgoldenrodyellow",
-          borderColor: "lightgoldenrodyellow",
+          backgroundColor: "goldenrod",
+          borderColor: "transparent",
         } :
         {
           backgroundColor: "lightsteelblue",
