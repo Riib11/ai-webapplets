@@ -6,6 +6,7 @@ import * as MtgCard from './MtgCard';
 import * as ai from '../ai';
 import OpenAI from 'openai';
 import { Result, ok } from '../result';
+import Button from '../widget/Button';
 
 type Inputs = {
   system: { case: 'string', value: string },
@@ -132,9 +133,35 @@ export default function MtgCardApplet(
             Error: {result.msg}
           </div>
         )
-        case 'ok': return (
-          <MtgCard.MtgCardView card={result.value.card} />
-        )
+        case 'ok': {
+          const card = result.value.card;
+          return (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "1em",
+              }}
+            >
+              <MtgCard.MtgCardView card={card} />
+              <Button onClick={async (event) => {
+                var jsonString = JSON.stringify(card);
+                var blob = new Blob([jsonString], { type: "application/json" });
+                var url = URL.createObjectURL(blob);
+
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = `${card.name}.mtg-card.json`;
+                a.click();
+                document.removeChild(a);
+
+                window.URL.revokeObjectURL(url);
+              }}
+              >download</Button>
+            </div>
+          )
+        }
       }
     }
   }
