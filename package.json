@@ -1,7 +1,7 @@
 {
-  "name": "ai-webapps",
+  "name": "ai-webapplets",
   "version": "0.1.0",
-  "homepage": "https://rybl.net/ai-webapps",
+  "homepage": "https://rybl.net/ai-webapplets",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
