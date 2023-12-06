@@ -40,28 +40,49 @@ export default function ExampleResultQueueApplet(props: {}): JSX.Element {
     }
   }
 
-  function renderGeneratingResult(inputs: Inputs, state: GenerationState): JSX.Element {
-    return (<div>
-      <div>Generating result for inputs: {JSON.stringify(inputs)}</div>
-      <div>i: {state.i}</div>
-    </div>)
-  }
+  function renderResult(inputs: Inputs, state: GenerationState, result?: Result): JSX.Element {
+    const style: React.CSSProperties =
+    {
+      transition: "border-color 1s linear",
+      padding: "1em",
+      borderStyle: "solid",
+      borderWidth: "1em",
+      ...
+      (result === undefined ?
+        {
+          backgroundColor: "lightgoldenrodyellow",
+          borderColor: "lightgoldenrodyellow",
+        } :
+        {
+          backgroundColor: "lightsteelblue",
+          borderColor: "black",
+        }
+      )
+    }
 
-  function renderDoneResult(result: Result): JSX.Element {
-    return (<div>
-      Result: {JSON.stringify(result)}
-    </div>)
+    if (result === undefined) {
+      return (
+        <div style={style}>
+          <div>Generating result for inputs: {JSON.stringify(inputs)}</div>
+          <div>i: {state.i}</div>
+        </div>
+      )
+    } else {
+      return (
+        <div style={style}>
+          Result: {JSON.stringify(result)}
+        </div>
+      )
+    }
   }
 
   return (
-    <div>
-      <ResultQueueApplet.ResultQueueApplet<Inputs, GenerationState, Result>
-        defaultInputs={defaultInputs}
-        initialGenerationState={initialGenerationState}
-        generateResult={generateResult}
-        renderGeneratingResult={renderGeneratingResult}
-        renderDoneResult={renderDoneResult}
-      />
-    </div>
+    <ResultQueueApplet.ResultQueueApplet<Inputs, GenerationState, Result>
+      title="Example Result Queue"
+      defaultInputs={defaultInputs}
+      initialGenerationState={initialGenerationState}
+      generateResult={generateResult}
+      renderResult={renderResult}
+    />
   )
 }

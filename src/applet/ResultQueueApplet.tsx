@@ -1,4 +1,6 @@
 import React from 'react';
+import * as constants from '../constants';
+import Applet from '../Applet';
 
 export type GenericInputValue
   = { case: 'string', value: string }
@@ -7,16 +9,19 @@ export type GenericInputValue
 
 export type GenericInputs = { [key: string]: GenericInputValue }
 
-export type Props<Inputs extends GenericInputs, GenerationState, Result> =
-  {
-    defaultInputs: Inputs,
-    initialGenerationState: (inputs: Inputs) => GenerationState,
-    generateResult: (inputs: Inputs, state: GenerationState, setState: React.Dispatch<React.SetStateAction<GenerationState>>) => Promise<Result>,
-    renderGeneratingResult: (inputs: Inputs, state: GenerationState) => JSX.Element,
-    renderDoneResult: (result: Result) => JSX.Element,
-  }
 
-export function ResultQueueApplet<Inputs extends GenericInputs, GenerationState, Result>(props: Props<Inputs, GenerationState, Result>): JSX.Element {
+
+export function ResultQueueApplet<Inputs extends GenericInputs, GenerationState, Result>(
+  props:
+    {
+      title: string,
+      defaultInputs: Inputs,
+      initialGenerationState: (inputs: Inputs) => GenerationState,
+      generateResult: (inputs: Inputs, state: GenerationState, setState: React.Dispatch<React.SetStateAction<GenerationState>>) => Promise<Result>,
+      renderResult: (inputs: Inputs, state: GenerationState, result?: Result) => JSX.Element,
+      resultsStyle?: React.CSSProperties
+    }
+): JSX.Element {
   const [resultElements, setResultElements] = React.useState<JSX.Element[]>([]);
   const [inputs, setInputs] = React.useState<Inputs>(props.defaultInputs);
 
@@ -29,8 +34,7 @@ export function ResultQueueApplet<Inputs extends GenericInputs, GenerationState,
         inputs={structuredClone(inputs)}
         initialGenerationState={props.initialGenerationState}
         generateResult={props.generateResult}
-        renderGeneratingResult={props.renderGeneratingResult}
-        renderDoneResult={props.renderDoneResult}
+        renderResult={props.renderResult}
       />)
     ])
   }
@@ -75,14 +79,15 @@ export function ResultQueueApplet<Inputs extends GenericInputs, GenerationState,
   }
 
   return (
-    <div /* applet */>
-      <form
+    <Applet title={props.title}>
+      <form /** inputs */
         onSubmit={handleSubmit}
         style={{
           width: "fit-content",
           display: "flex",
           flexDirection: "column",
-          alignItems: "flex-end"
+          alignItems: "flex-end",
+          background: "darkgray",
         }}>
         <table>
           <tbody>
@@ -91,15 +96,17 @@ export function ResultQueueApplet<Inputs extends GenericInputs, GenerationState,
         </table>
         <SubmitButton />
       </form>
-      <div /* results */
+      <div /** results */
         style={{
           display: "flex",
           flexDirection: "column-reverse",
+          alignItems: "flex-start",
           gap: "1em",
+          ...props.resultsStyle
         }}>
         {resultElements}
       </div>
-    </div>
+    </Applet >
   )
 }
 
@@ -107,14 +114,17 @@ function SubmitButton(props: {}) {
   const [hover, setHover] = React.useState(false);
 
   return (
-    <button type="submit"
+    <button
+      type="submit"
       style={{
-        outline: hover ? "4px solid red" : "none",
         border: "none",
         cursor: "pointer",
-        width: "14em",
+        // width: "14em",
+        width: "100%",
         height: "2em",
         fontWeight: "bold",
+        color: constants.button_color,
+        background: hover ? constants.button_hover_background : constants.button_background,
       }}
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
@@ -127,20 +137,15 @@ function Result<Inputs extends GenericInputs, GenerationState, Result>(
     inputs: Inputs,
     initialGenerationState: (inputs: Inputs) => GenerationState,
     generateResult: (inputs: Inputs, state: GenerationState, setState: React.Dispatch<React.SetStateAction<GenerationState>>) => Promise<Result>,
-    renderGeneratingResult: (inputs: Inputs, state: GenerationState) => JSX.Element,
-    renderDoneResult: (result: Result) => JSX.Element,
+    renderResult: (inputs: Inputs, state: GenerationState, result?: Result) => JSX.Element,
   }
 ): JSX.Element {
   const [state, setState] = React.useState(props.initialGenerationState(props.inputs));
-  const [result, setResult] = React.useState<Result | null>(null);
+  const [result, setResult] = React.useState<Result | undefined>(undefined);
 
   React.useEffect(() => {
     props.generateResult(props.inputs, state, setState).then(setResult);
   }, []);
 
-  return (
-    <div>
-      {result === null ? props.renderGeneratingResult(props.inputs, state) : props.renderDoneResult(result)}
-    </div>
-  )
+  return props.renderResult(props.inputs, state, result);
 }

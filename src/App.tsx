@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import MtgCardApplet from './mtg/MtgCardApplet';
 import ExampleResultQueueApplet from './applet/ExampleResultQueueApplet';
-import github from './github.png';
-import * as Applet from './Applet';
+import Applet from './Applet';
 import * as constants from './constants';
+import * as ai from './ai';
 
 const appModes = (() => {
   let appModes = [
@@ -28,7 +28,12 @@ function renderAppModeContentLabel(mode: AppMode): string {
 
 export default function App() {
   const [mode, setMode] = useState<AppMode>(appModes[0]);
-  const [OPENAI_API_KEY, set_OPENAI_API_KEY] = useState<string>("");
+  const [OPENAI_API_KEY, _set_OPENAI_API_KEY] = useState<string>("");
+
+  function set_OPENAI_API_KEY(new_OPENAI_API_KEY: string): void {
+    _set_OPENAI_API_KEY(new_OPENAI_API_KEY);
+    ai.keys.OPENAI_API_KEY = new_OPENAI_API_KEY;
+  }
 
   function renderAppModeContent(mode: AppMode): JSX.Element {
     return (
@@ -41,28 +46,17 @@ export default function App() {
       >
         {(() => {
           if (OPENAI_API_KEY === "") {
-            return [
+            return (
               <div style={{ fontStyle: 'italic', backgroundColor: 'lightsalmon', padding: "1em" }}>
-                You need to provide your OpenAI API key in order to use this app.
+                You need to provide your OpenAI API key in order to use this webapp.
               </div>
-            ]
+            )
           }
-          return [
-            (<Applet.AppletTitle>{mode}</Applet.AppletTitle>),
-            (<div
-              style={{
-                flexGrow: 1,
-              }}
-            >
-              {(() => {
-                switch (mode) {
-                  case 'mtg card': return (<MtgCardApplet OPENAI_API_KEY={OPENAI_API_KEY} />)
-                  case 'example result queue': return (<ExampleResultQueueApplet />)
-                  default: return (<div>TODO</div>)
-                }
-              })()}
-            </div>)
-          ]
+          switch (mode) {
+            case 'mtg card': return (<MtgCardApplet OPENAI_API_KEY={OPENAI_API_KEY} />)
+            case 'example result queue': return (<ExampleResultQueueApplet />)
+            default: return (<Applet title={mode}>TODO</Applet>)
+          }
         })()}
       </div>
     )
@@ -84,6 +78,7 @@ export default function App() {
       <div
         // sidebar
         style={{
+          flexShrink: 0,
           width: constants.sidebar_width,
           height: "100svh",
           background: constants.sidebar_background,
@@ -103,14 +98,15 @@ export default function App() {
           <div style={{
             fontWeight: "bold",
             fontSize: "1.2em",
+            fontFamily: "monospace"
           }}>
-            AI Webapplets
+            ai-webapplets
           </div>
           <input
             type='password'
             id="OPENAI_API_KEY"
             placeholder='OpenAI API key'
-            onChange={(event) => set_OPENAI_API_KEY(event.target.value)}
+            onChange={(event) => _set_OPENAI_API_KEY(event.target.value)}
             style={{
               display: "block",
               width: "100%",

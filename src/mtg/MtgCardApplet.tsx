@@ -1,4 +1,3 @@
-import '../Applet.scss'
 import './MtgCardApplet.scss'
 import { ChangeEventHandler, FormEventHandler, useMemo, useReducer, useState } from 'react'
 import { MtgCard, MtgCardView } from './MtgCard';
