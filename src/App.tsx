@@ -9,7 +9,7 @@ import KnowledgeTreeApplet from './applet/KnowledgeTreeApplet';
 const appModes = (() => {
   let appModes = [
     'mtg card',
-    'knowledge Tree',
+    'knowledge tree',
     'short story',
   ];
 
@@ -60,7 +60,7 @@ export default function App() {
           }
           switch (mode) {
             case 'mtg card': return (<MtgCardApplet />)
-            case 'knowledge Tree': return (<KnowledgeTreeApplet />)
+            case 'knowledge tree': return (<KnowledgeTreeApplet />)
             case 'example result queue': return (<ExampleResultQueueApplet />)
             default: return (<Applet title={mode}>TODO</Applet>)
           }
@@ -119,6 +119,8 @@ export default function App() {
               width: "100%",
               background: constants.sidebar_background,
               color: constants.sidebar_color,
+              border: "none",
+              outline: "none",
             }}
           />
         </div>
