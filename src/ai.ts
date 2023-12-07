@@ -45,9 +45,10 @@ export async function openai_chat_completions_create_function_call<Ts extends Ch
   tools: Ts,
   name: N,
   messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[],
+  model?: OpenAI.Chat.Completions.ChatCompletionCreateParams["model"],
 ): Promise<Result<FunctionCallParameters<Ts[N]>>> {
   const chat_completion = await openai.chat.completions.create({
-    model: "gpt-4-1106-preview",
+    model: model ?? "gpt-4-1106-preview",
     tool_choice: { type: "function", function: { name: name as string } },
     tools: Object.keys(tools).map(name => tools[name]),
     messages,

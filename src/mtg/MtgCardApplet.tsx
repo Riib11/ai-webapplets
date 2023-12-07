@@ -10,8 +10,8 @@ import Button from '../widget/Button';
 import LevelLoader from '../widget/LevelLoader';
 
 type Inputs = {
-  system: { case: 'string', value: string },
-  theme: { case: 'string', value: string },
+  system: { case: 'long-string', value: string },
+  theme: { case: 'short-string', value: string },
   "image?": { case: 'boolean', value: boolean },
 }
 
@@ -27,8 +27,8 @@ export default function MtgCardApplet(
   const openai = ai.useOpenAI();
 
   const defaultInputs: Inputs = {
-    system: { case: 'string', value: "You are expert designer for new Magic the Gathering cards. Your card designs are always interesting, unique, draw from many different sources of inspiration, balanced, and thematically aligned with the user's prompt. Your card designs always thoughtfully integrate user's theme with the mechanics of the card." },
-    theme: { case: 'string', value: "" },
+    system: { case: 'long-string', value: "You are expert designer for new Magic the Gathering cards. Your card designs are always interesting, unique, draw from many different sources of inspiration, balanced, and thematically aligned with the user's prompt. Your card designs always thoughtfully integrate user's theme with the mechanics of the card." },
+    theme: { case: 'short-string', value: "" },
     "image?": { case: 'boolean', value: false },
   };
 

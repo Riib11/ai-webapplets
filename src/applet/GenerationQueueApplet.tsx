@@ -3,7 +3,8 @@ import * as constants from '../constants';
 import Applet from '../Applet';
 
 export type GenericInputValue
-  = { case: 'string', value: string }
+  = { case: 'long-string', value: string }
+  | { case: 'short-string', value: string }
   | { case: 'number', min?: number, max?: number, value: number }
   | { case: 'boolean', value: boolean }
 
@@ -20,7 +21,6 @@ export default function GenerationQueueApplet<Inputs extends GenericInputs, Gene
       generationsStyle?: React.CSSProperties
     }
 ): JSX.Element {
-  // const [generationElements, setGenerationElements] = React.useState<JSX.Element[]>([]);
   const [generationProps, setGenerationProps] = React.useState<GenerationProps<Inputs, GenerationState, Generation>[]>([]);
   const [inputs, setInputs] = React.useState<Inputs>(props.defaultInputs);
 
@@ -48,8 +48,19 @@ export default function GenerationQueueApplet<Inputs extends GenericInputs, Gene
     const value: GenericInputValue = inputs[key];
     const valueElement: JSX.Element = (() => {
       switch (value.case) {
-        // case 'string': return (<input type='text' name={key} value={value.value} onChange={handleChange} />)
-        case 'string': return (<textarea name={key} value={value.value} onChange={handleChange}></textarea>)
+        case 'short-string': return (
+          <input
+            type='text' name={key} value={value.value} onChange={handleChange}
+          />
+        )
+        case 'long-string': return (
+          <input
+            name={key} value={value.value} onChange={handleChange}
+            style={{
+              minWidth: "40em",
+              minHeight: "fit-content",
+            }}
+          />)
         case 'number': return (<input type='number' name={key} min={value.min} max={value.max} value={value.value} onChange={handleChange} />)
         case 'boolean': return (<input type='checkbox' name={key} checked={value.value} onChange={handleChange} />)
       }
