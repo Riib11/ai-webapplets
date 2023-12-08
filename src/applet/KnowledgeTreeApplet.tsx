@@ -10,12 +10,17 @@ export default function KnowledgeTreeApplet(
 
   return (
     <Applet title="Knowledge Tree">
-      <input
-        type="text"
-        value={title}
-        placeholder='root topic title'
-        onChange={(event) => set_title(event.target.value)}
-      />
+      <div>
+        <input
+          type="text"
+          value={title}
+          placeholder='root topic title'
+          onChange={(event) => set_title(event.target.value)}
+          style={{
+            width: "40em",
+          }}
+        />
+      </div>
       <div
         style={{
           overflow: "scroll",

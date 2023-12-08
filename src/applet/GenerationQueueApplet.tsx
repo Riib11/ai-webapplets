@@ -1,6 +1,7 @@
 import React from 'react';
 import * as constants from '../constants';
 import Applet from '../Applet';
+import TextArea from '../widget/TextArea';
 
 export type GenericInputValue
   = { case: 'long-string', value: string }
@@ -20,7 +21,7 @@ export default function GenerationQueueApplet<Inputs extends GenericInputs, Gene
       renderGeneration: (inputs: Inputs, state: GenerationState, generation?: Generation) => JSX.Element,
       generationsStyle?: React.CSSProperties
     }
-): JSX.Element {
+): React.ReactNode {
   const [generationProps, setGenerationProps] = React.useState<GenerationProps<Inputs, GenerationState, Generation>[]>([]);
   const [inputs, setInputs] = React.useState<Inputs>(props.defaultInputs);
 
@@ -50,17 +51,40 @@ export default function GenerationQueueApplet<Inputs extends GenericInputs, Gene
       switch (value.case) {
         case 'short-string': return (
           <input
-            type='text' name={key} value={value.value} onChange={handleChange}
+            type='text'
+            name={key}
+            value={value.value}
+            onChange={handleChange}
+            style={{
+              width: "40em",
+            }}
           />
         )
         case 'long-string': return (
-          <input
-            name={key} value={value.value} onChange={handleChange}
+          <TextArea
+            name={key}
+            value={value.value}
+            onChange={handleChange}
             style={{
-              minWidth: "40em",
-              minHeight: "fit-content",
+              width: "40em",
             }}
-          />)
+          />
+        )
+        // case 'long-string': return (
+        //   <textarea
+        //     name={key}
+        //     value={value.value}
+        //     onChange={(event) => {
+        //       event.target.style.height = event.target.scrollHeight + 'px';
+        //       handleChange(event)
+        //     }}
+        //     style={{
+        //       height: "fit-content",
+        //       width: "40em",
+        //       // flex: 1,
+        //     }}
+        //   />
+        // )
         case 'number': return (<input type='number' name={key} min={value.min} max={value.max} value={value.value} onChange={handleChange} />)
         case 'boolean': return (<input type='checkbox' name={key} checked={value.value} onChange={handleChange} />)
       }
