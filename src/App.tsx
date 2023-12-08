@@ -5,12 +5,14 @@ import Applet from './Applet';
 import * as constants from './constants';
 import * as ai from './ai';
 import KnowledgeTreeApplet from './applet/KnowledgeTreeApplet';
+import BattleGeneratorApplet from './applet/BattleGeneratorApplet';
 
 const appModes = (() => {
   let appModes = [
     'mtg card',
     'knowledge tree',
     'short story',
+    'battle narrator',
   ];
 
   // for (let i = 1; i <= 40; i++) appModes.push(`example #${i}`);
@@ -62,6 +64,7 @@ export default function App() {
             case 'mtg card': return (<MtgCardApplet />)
             case 'knowledge tree': return (<KnowledgeTreeApplet />)
             case 'example result queue': return (<ExampleResultQueueApplet />)
+            case 'battle narrator': return (<BattleGeneratorApplet />)
             default: return (<Applet title={mode}>TODO</Applet>)
           }
         })()}

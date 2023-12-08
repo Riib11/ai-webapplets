@@ -57,34 +57,13 @@ export default function MtgCardApplet(
             parameters: {
               type: "object",
               properties: {
-                name: {
-                  type: "string",
-                  description: "The creature's name",
-                },
-                mana_cost: {
-                  type: "string",
-                  description: "The creature card's mana cost.",
-                },
-                creature_type: {
-                  type: "string",
-                  description: "The creature's creature type.",
-                },
-                oracle_text: {
-                  type: "string",
-                  description: "The creature's oracle text.",
-                },
-                power: {
-                  type: "number",
-                  description: "The creature's power.",
-                },
-                toughness: {
-                  type: "number",
-                  description: "The creature's toughness.",
-                },
-                flavor_text: {
-                  type: "string",
-                  description: "The creature card's flavor text.",
-                },
+                name: { type: "string", description: "The creature's name" },
+                mana_cost: { type: "string", description: "The creature's mana cost.", },
+                creature_type: { type: "string", description: "The creature's creature type.", },
+                oracle_text: { type: "string", description: "The creature's oracle text.", },
+                power: { type: "number", description: "The creature's power.", },
+                toughness: { type: "number", description: "The creature's toughness.", },
+                flavor_text: { type: "string", description: "The creature's flavor text.", },
               },
             }
           },
@@ -130,7 +109,7 @@ export default function MtgCardApplet(
     })
   }
 
-  function renderGeneration(inputs: Inputs, state: GenerationState, result?: Result<Generation>): JSX.Element {
+  function renderGeneration(inputs: Inputs, state: GenerationState, set_state: React.Dispatch<React.SetStateAction<GenerationState>>, result?: Result<Generation>): JSX.Element {
     if (result === undefined) {
       return (
         <div>

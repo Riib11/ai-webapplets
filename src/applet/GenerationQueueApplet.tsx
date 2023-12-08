@@ -17,8 +17,8 @@ export default function GenerationQueueApplet<Inputs extends GenericInputs, Gene
       title: string,
       defaultInputs: Inputs,
       initializeGenerationState: (inputs: Inputs) => GenerationState,
-      generate: (inputs: Inputs, state: GenerationState, setState: React.Dispatch<React.SetStateAction<GenerationState>>) => Promise<Generation>,
-      renderGeneration: (inputs: Inputs, state: GenerationState, generation?: Generation) => JSX.Element,
+      generate: (inputs: Inputs, state: GenerationState, set_state: React.Dispatch<React.SetStateAction<GenerationState>>) => Promise<Generation>,
+      renderGeneration: (inputs: Inputs, state: GenerationState, set_state: React.Dispatch<React.SetStateAction<GenerationState>>, generation?: Generation) => JSX.Element,
       generationsStyle?: React.CSSProperties
     }
 ): React.ReactNode {
@@ -174,17 +174,17 @@ function SubmitButton(props: {}) {
 type GenerationProps<Inputs extends GenericInputs, GenerationState, Generation> = {
   inputs: Inputs,
   initializeGenerationState: (inputs: Inputs) => GenerationState,
-  generate: (inputs: Inputs, state: GenerationState, setState: React.Dispatch<React.SetStateAction<GenerationState>>) => Promise<Generation>,
-  renderGeneration: (inputs: Inputs, state: GenerationState, generation?: Generation) => JSX.Element,
+  generate: (inputs: Inputs, state: GenerationState, set_state: React.Dispatch<React.SetStateAction<GenerationState>>) => Promise<Generation>,
+  renderGeneration: (inputs: Inputs, state: GenerationState, set_state: React.Dispatch<React.SetStateAction<GenerationState>>, generation?: Generation) => JSX.Element,
 }
 
 function Generation<Inputs extends GenericInputs, GenerationState, Generation>(props: GenerationProps<Inputs, GenerationState, Generation>): JSX.Element {
-  const [state, setState] = React.useState(props.initializeGenerationState(props.inputs));
+  const [state, set_state] = React.useState(props.initializeGenerationState(props.inputs));
   const [generation, setGeneration] = React.useState<Generation | undefined>(undefined);
 
   React.useEffect(() => {
-    props.generate(props.inputs, state, setState).then(setGeneration);
+    props.generate(props.inputs, state, set_state).then(setGeneration);
   }, []);
 
-  return props.renderGeneration(props.inputs, state, generation);
+  return props.renderGeneration(props.inputs, state, set_state, generation);
 }

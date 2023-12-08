@@ -12,8 +12,6 @@ export default function TextArea(
 
   function updateHeight() {
     if (ref_textarea.current !== null) {
-      console.debug(ref_textarea.current.style.height);
-      console.debug(ref_textarea.current.scrollHeight);
       ref_textarea.current.style.height = 0 + 'px';
       ref_textarea.current.style.height = ref_textarea.current.scrollHeight + 'px';
     }
