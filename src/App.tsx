@@ -11,8 +11,8 @@ const appModes = (() => {
   let appModes = [
     'mtg card',
     'knowledge tree',
-    'short story',
     'battle narrator',
+    'short story',
   ];
 
   // for (let i = 1; i <= 40; i++) appModes.push(`example #${i}`);
@@ -63,7 +63,6 @@ export default function App() {
           switch (mode) {
             case 'mtg card': return (<MtgCardApplet />)
             case 'knowledge tree': return (<KnowledgeTreeApplet />)
-            case 'example result queue': return (<ExampleResultQueueApplet />)
             case 'battle narrator': return (<BattleGeneratorApplet />)
             default: return (<Applet title={mode}>TODO</Applet>)
           }

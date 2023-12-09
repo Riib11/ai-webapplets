@@ -84,8 +84,8 @@ export default function MtgCardApplet(
       return await ai.openai_images_generate_b64_json(
         openai,
         [
-          `You are an expert experienced expressive thoughtful fantasy artist. ${text_data.name} is a ${text_data.creature_type} creature, and here is a related thematic passage: ${text_data.flavor_text.replaceAll("\n", " ")}`,
-          `Create a thematic artwork for ${text_data.name}. The artwork MUST be focussed on ${text_data.name} and capture the creature's essence and be fantasy styled, finely detailed, and high contrast.`,
+          `You are an expert experienced expressive thoughtful fantasy artist. Consider the following thematic passage related to a ${text_data.creature_type} creature: ${text_data.flavor_text.replaceAll("\n", " ")}`,
+          `Create a thematic artwork for the creature.`,
         ].join("\n")
       ).then(result => result.expect())
     })()
